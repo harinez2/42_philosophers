@@ -10,7 +10,7 @@ sem_t	*open_semaphore(char *sem_name)
 
 	i = 0;
 	ft_strlcpy(sem_name, "philo00", 7);
-	while (i < RETRY_MAX)
+	while (i < SEM_OPEN_RETRY_MAX)
 	{
 		printf("trying to open sem : %s\n", sem_name);
 		sem = sem_open(sem_name, O_CREAT | O_EXCL);
@@ -19,9 +19,9 @@ sem_t	*open_semaphore(char *sem_name)
 		sem_name[5]++;
 		i++;
 	}
-	if (sem == SEM_FAILED && i == RETRY_MAX)
+	if (sem == SEM_FAILED && i == SEM_OPEN_RETRY_MAX)
 	{
-		printf("semopen error\n");
+		printf("Error: Failed to open semaphore(%d)\n", errno);
 		exit (-1);
 	}
 	return (sem);
@@ -34,11 +34,26 @@ int	main(void)
 	int		ret;
 
 	sem = open_semaphore(sem_name);
-	//+1 sem_post
-	//-1 sem_wait
+
+	ret = sem_post(sem);
+	printf("post:%d\n", ret);
+	ret = sem_post(sem);
+	printf("post:%d\n", ret);
+	ret = sem_post(sem);
+	printf("post:%d\n", ret);
+	ret = sem_wait(sem);
+	printf("wait:%d\n", ret);
+	ret = sem_wait(sem);
+	printf("wait:%d\n", ret);
+	
 	ret = sem_close(sem);
 	if (ret == -1)
-		printf("sem close error:%d\n", errno);
+	{
+		printf("Error: Failed to close semaphore(%d)\n", errno);
+		exit (-1);
+	}
+	ret =  sem_unlink(sem_name);
+	printf("unlinked:%d\n", ret);
 	//sem_unlink
 
 }
