@@ -4,10 +4,55 @@
 # include <semaphore.h>
 # include <fcntl.h>
 # include <stdlib.h>
+# include <stdio.h>
+# include <errno.h>
+# include <sys/types.h>
+# include <unistd.h>
+# include <sys/time.h>
+# include <sys/wait.h>
 
-# define SEM_OPEN_RETRY_MAX		10
+# define	SEM_OPEN_RETRY_MAX	10
+
+# define	MAX_PHILOSPHERS		100
+# define	P_TAKEN_FORK		1
+# define	P_EATING			2
+# define	P_SLEEPING			3
+# define	P_THINKING			4
+# define	P_DIED				5
+
+# define	ERR_SEM_OPEN		-1
+# define	ERR_SEM_CLOSE		-2
+# define	ERR_FAILED_TO_FORK	-3
+# define	ERR_FAILED_TO_WAIT	-4
+
+sem_t	*g_sem;
+
+typedef struct s_params
+{
+	int		num_of_philo;
+	int		ttdie;
+	int		tteat;
+	int		ttsleep;
+	int		num_of_times_each_philo_must_eat;
+	int		i;
+	int		remain_eat_time[MAX_PHILOSPHERS];
+	int		someone_dead;
+}	t_params;
+
+typedef struct s_phi
+{
+	int		i;
+	long	lasteat_time;
+	long	now_time;
+	int		status;
+}	t_phi;
+
+void	philosopher(t_params *p, int i);
 
 size_t	ft_strlen(const char *str);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+int		ft_atoi(char *s, int *retnum);
+
+void	error_exit(int errcode);
 
 #endif
