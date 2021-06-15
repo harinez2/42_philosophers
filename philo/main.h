@@ -5,6 +5,7 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
+# include <stdlib.h>
 
 # define	MAX_PHILOSPHERS		100
 # define	P_TAKEN_FORK		1

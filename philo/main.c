@@ -1,16 +1,5 @@
 #include "main.h"
 
-void	print_fork(t_params *p)
-{
-	int			i;
-
-	printf("fork : ");
-	i = 0;
-	while (i < p->num_of_philo)
-		printf("%d ", p->fork[i++]);
-	printf("\n");
-}
-
 static int	init_param(t_params *p, int argc, char **argv)
 {
 	int			i;
@@ -40,6 +29,29 @@ static int	init_param(t_params *p, int argc, char **argv)
 	return (0);
 }
 
+static void	print_usage_exit(void)
+{
+	printf("Usage:\n");
+	printf("    ./philo NUM_OF_PHILO TT_DIE TT_EAT TT_SLEEP [TIMES_MUST_EAT]\n");
+	printf("\n");
+	printf("Parameters:\n");
+	printf("    NUM_OF_PHILO\n");
+	printf("        The number of philosophers/forks.\n");
+	printf("    TT_DIE\n");
+	printf("        The time to die if a philosopher doesn't start eating\n");
+	printf("        in milliseconds.\n");
+	printf("    TT_EAT\n");
+	printf("        The time it takes for a philosopher to eat in millisec.\n");
+	printf("    TT_SLEEP\n");
+	printf("        The time the philosopher will spend sleeping in\n");
+	printf("        millisec.\n");
+	printf("    TIMES_MUST_EAT\n");
+	printf("        If all philosophers eat at least the specified times,\n");
+	printf("        the simulation will stop.\n");
+	printf("\n");
+	exit (0);
+}
+
 int	main(int argc, char **argv)
 {
 	int				i;
@@ -47,7 +59,7 @@ int	main(int argc, char **argv)
 	t_params		p;
 
 	if (argc < 5 || 6 < argc)
-		return (0);
+		print_usage_exit();
 	if (init_param(&p, argc, argv) == -1)
 		return (-1);
 	i = 0;
