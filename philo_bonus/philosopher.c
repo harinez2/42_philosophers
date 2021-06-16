@@ -26,17 +26,17 @@ static void	print_status(long time, int who, int something)
 static void	change_status(t_params *p, t_phi *me)
 {
 	if (me->status == P_THINKING
-		&& sem_wait(g_sem) == 0 && sem_wait(g_sem) == 0)
+		&& sem_wait(g_sem) == 0)
 	{
 		print_status(me->now_time, me->i, P_TAKEN_FORK);
 		me->status = P_EATING;
 		p->remain_eat_time[me->i]--;
+		me->now_time = get_time();
 		me->lasteat_time = me->now_time;
 	}
 	else if (me->status == P_EATING
 		&& me->now_time - me->lasteat_time > p->tteat)
 	{
-		sem_post(g_sem);
 		sem_post(g_sem);
 		me->status = P_SLEEPING;
 	}

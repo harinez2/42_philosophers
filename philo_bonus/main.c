@@ -32,7 +32,7 @@ static void	open_semaphore(char *sem_name, t_params *p)
 	while (i < SEM_OPEN_RETRY_MAX)
 	{
 		printf("trying to open sem : %s\n", sem_name);
-		g_sem = sem_open(sem_name, O_CREAT | O_EXCL, 0600, p->num_of_philo);
+		g_sem = sem_open(sem_name, O_CREAT | O_EXCL, 0600, p->num_of_philo / 2);
 		if (g_sem != SEM_FAILED)
 			break ;
 		sem_name[6]++;
