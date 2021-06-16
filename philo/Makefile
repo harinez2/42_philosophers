@@ -1,6 +1,7 @@
 NAME		= philo
 SRCS		= \
 				libft.c \
+				error.c \
 				philosopher.c \
 				main.c
 OBJS		= $(SRCS:.c=.o)
