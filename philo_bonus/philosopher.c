@@ -56,7 +56,7 @@ static int	is_finished(t_params *p)
 	i = 0;
 	while (i < p->num_of_philo)
 	{
-		if (p->remain_eat_time > 0)
+		if (p->remain_eat_time >= 0)
 			return (0);
 		i++;
 	}
