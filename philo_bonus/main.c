@@ -1,52 +1,26 @@
 #include "main.h"
 
-static void	print_usage_exit(void)
-{
-	printf("Usage:\n");
-	printf("    ./philo NUM_OF_PHILO TT_DIE TT_EAT TT_SLEEP [TIMES_MUST_EAT]\n");
-	printf("\n");
-	printf("Parameters:\n");
-	printf("    NUM_OF_PHILO\n");
-	printf("        The number of philosophers/forks.\n");
-	printf("    TT_DIE\n");
-	printf("        The time to die if a philosopher doesn't start eating\n");
-	printf("        in milliseconds.\n");
-	printf("    TT_EAT\n");
-	printf("        The time it takes for a philosopher to eat in millisec.\n");
-	printf("    TT_SLEEP\n");
-	printf("        The time the philosopher will spend sleeping in\n");
-	printf("        millisec.\n");
-	printf("    TIMES_MUST_EAT\n");
-	printf("        If all philosophers eat at least the specified times,\n");
-	printf("        the simulation will stop.\n");
-	printf("\n");
-	exit (0);
-}
-
-static void	open_semaphore(char *sem_name, t_params *p)
+static void	open_semaphore(char *sem_name, int sem_cnt, sem_t **sem)
 {
 	int		i;
 
-	ft_strlcpy(sem_name, "/philo0", 8);
 	i = 0;
 	while (i < SEM_OPEN_RETRY_MAX)
 	{
 		printf("trying to open sem : %s\n", sem_name);
-		g_sem = sem_open(sem_name, O_CREAT | O_EXCL, 0600, p->num_of_philo / 2);
-		if (g_sem != SEM_FAILED)
+		*sem = sem_open(sem_name, O_CREAT | O_EXCL, 0600, sem_cnt);
+		if (*sem != SEM_FAILED)
 			break ;
 		sem_name[6]++;
 		i++;
 	}
-	if (g_sem == SEM_FAILED && i == SEM_OPEN_RETRY_MAX)
+	if (*sem == SEM_FAILED && i == SEM_OPEN_RETRY_MAX)
 		error_exit(ERR_SEM_OPEN);
 	sem_unlink(sem_name);
 }
 
 static int	init_param(t_params *p, int argc, char **argv)
 {
-	int			i;
-
 	if (ft_atoi(argv[1], &p->num_of_philo) == -1)
 		return (-1);
 	if (ft_atoi(argv[2], &p->ttdie) == -1)
@@ -59,55 +33,68 @@ static int	init_param(t_params *p, int argc, char **argv)
 	if (argc == 6
 		&& ft_atoi(argv[5], &p->num_of_times_each_philo_must_eat) == -1)
 		return (-1);
-	i = 0;
-	while (i < p->num_of_philo)
-	{
-		p->remain_eat_time[i] = 0;
-		if (p->num_of_times_each_philo_must_eat != -1)
-			p->remain_eat_time[i] = p->num_of_times_each_philo_must_eat;
-		i++;
-	}
-	p->someone_dead = 0;
+	p->remain_eat_time = p->num_of_times_each_philo_must_eat;
 	return (0);
 }
 
-static void	create_philosophers(t_params *p)
+static void	create_philosophers(t_params *p, int *pid)
 {
 	int			i;
-	pid_t		pid;
-	pid_t		wait_pid;
-	int			status;
 
 	i = 0;
 	while (i < p->num_of_philo)
 	{
 		p->i = i;
-		pid = fork();
-		if (pid == -1)
+		pid[i] = fork();
+		if (pid[i] == -1)
 			error_exit(ERR_FAILED_TO_FORK);
-		else if (pid == 0)
+		else if (pid[i] == 0)
 			philosopher(p, i);
 		i++;
 	}
-	status = 0;
-	wait_pid = wait(&status);
-	if (wait_pid == -1)
-		error_exit(ERR_FAILED_TO_WAIT);
+}
+
+void	wait_all_philosophers(t_params *p, int *pid)
+{
+	int		i;
+	int		status;
+
+	if (sem_wait(g_sem_dead) == 0)
+	{
+		i = 0;
+		while (i < p->num_of_philo)
+			kill(pid[i++], SIGKILL);
+		i = 0;
+		while (i < p->num_of_philo)
+		{
+			if (wait(&status) < 0)
+				error_exit(ERR_FAILED_TO_WAIT);
+			i++;
+		}
+	}
+	if (sem_close(g_sem_philo) == -1)
+		error_exit(ERR_SEM_CLOSE);
+	if (sem_close(g_sem_dead) == -1)
+		error_exit(ERR_SEM_CLOSE);
 }
 
 int	main(int argc, char **argv)
 {
-	char		sem_name[8];
-	int			ret;
+	char		sem_philo[8];
+	char		sem_dead[8];
+	pid_t		pid[MAX_PHILOSPHERS];
 	t_params	p;
 
 	if (argc < 5 || 6 < argc)
 		print_usage_exit();
 	if (init_param(&p, argc, argv) == -1)
 		return (-1);
-	open_semaphore(sem_name, &p);
-	create_philosophers(&p);
-	ret = sem_close(g_sem);
-	if (ret == -1)
-		error_exit(ERR_SEM_CLOSE);
+	if (p.num_of_philo > MAX_PHILOSPHERS)
+		error_exit(ERR_MAX_PHILOSPHERS);
+	ft_strlcpy(sem_philo, "/philo0", 8);
+	open_semaphore(sem_philo, p.num_of_philo / 2, &g_sem_philo);
+	ft_strlcpy(sem_dead, "/deadd0", 8);
+	open_semaphore(sem_dead, 0, &g_sem_dead);
+	create_philosophers(&p, pid);
+	wait_all_philosophers(&p, pid);
 }

@@ -20,12 +20,14 @@
 # define	P_THINKING			4
 # define	P_DIED				5
 
-# define	ERR_SEM_OPEN		-1
-# define	ERR_SEM_CLOSE		-2
-# define	ERR_FAILED_TO_FORK	-3
-# define	ERR_FAILED_TO_WAIT	-4
+# define	ERR_MAX_PHILOSPHERS	-1
+# define	ERR_SEM_OPEN		-2
+# define	ERR_SEM_CLOSE		-3
+# define	ERR_FAILED_TO_FORK	-4
+# define	ERR_FAILED_TO_WAIT	-5
 
-sem_t	*g_sem;
+sem_t	*g_sem_philo;
+sem_t	*g_sem_dead;
 
 typedef struct s_params
 {
@@ -35,8 +37,7 @@ typedef struct s_params
 	int		ttsleep;
 	int		num_of_times_each_philo_must_eat;
 	int		i;
-	int		remain_eat_time[MAX_PHILOSPHERS];
-	int		someone_dead;
+	int		remain_eat_time;
 }	t_params;
 
 typedef struct s_phi
@@ -54,5 +55,6 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 int		ft_atoi(char *s, int *retnum);
 
 void	error_exit(int errcode);
+void	print_usage_exit(void);
 
 #endif

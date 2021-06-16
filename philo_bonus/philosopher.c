@@ -25,18 +25,18 @@ static void	print_status(long time, int who, int something)
 static void	change_status(t_params *p, t_phi *me)
 {
 	if (me->status == P_THINKING
-		&& sem_wait(g_sem) == 0)
+		&& sem_wait(g_sem_philo) == 0)
 	{
 		me->now_time = get_time();
 		print_status(me->now_time, me->i, P_TAKEN_FORK);
 		me->status = P_EATING;
-		p->remain_eat_time[me->i]--;
+		p->remain_eat_time--;
 		me->lasteat_time = me->now_time;
 	}
 	else if (me->status == P_EATING
 		&& me->now_time - me->lasteat_time > p->tteat)
 	{
-		sem_post(g_sem);
+		sem_post(g_sem_philo);
 		me->status = P_SLEEPING;
 	}
 	else if (me->status == P_SLEEPING
@@ -51,14 +51,12 @@ static int	is_finished(t_params *p)
 {
 	int			i;
 
-	if (p->someone_dead > 0)
-		return (1);
 	if (p->num_of_times_each_philo_must_eat == -1)
 		return (0);
 	i = 0;
 	while (i < p->num_of_philo)
 	{
-		if (p->remain_eat_time[i] > 0)
+		if (p->remain_eat_time > 0)
 			return (0);
 		i++;
 	}
@@ -75,7 +73,10 @@ void	philosopher(t_params *p, int i)
 	while (1)
 	{
 		if (is_finished(p) == 1)
+		{
+			sem_post(g_sem_dead);
 			exit (0);
+		}
 		me.now_time = get_time();
 		if (me.now_time - me.lasteat_time > p->ttdie)
 			break ;
@@ -83,6 +84,6 @@ void	philosopher(t_params *p, int i)
 		usleep(5);
 	}
 	print_status(me.now_time, me.i, P_DIED);
-	p->someone_dead++;
+	sem_post(g_sem_dead);
 	exit (0);
 }
