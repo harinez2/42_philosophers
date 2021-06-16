@@ -10,17 +10,16 @@ static long	get_time(void)
 
 static void	print_status(long time, int who, int something)
 {
-	printf("%ld %d ", time, ++who);
 	if (something == P_TAKEN_FORK)
-		printf("has taken a fork\n");
+		printf("%ld %d has taken a fork\n", time, ++who);
 	else if (something == P_EATING)
-		printf("is eating\n");
+		printf("%ld %d is eating\n", time, ++who);
 	else if (something == P_SLEEPING)
-		printf("is sleeping\n");
+		printf("%ld %d is sleeping\n", time, ++who);
 	else if (something == P_THINKING)
-		printf("is thinking\n");
+		printf("%ld %d is thinking\n", time, ++who);
 	else if (something == P_DIED)
-		printf("died\n");
+		printf("%ld %d died\n", time, ++who);
 }
 
 static void	change_status(t_params *p, t_phi *me)
@@ -28,10 +27,10 @@ static void	change_status(t_params *p, t_phi *me)
 	if (me->status == P_THINKING
 		&& sem_wait(g_sem) == 0)
 	{
+		me->now_time = get_time();
 		print_status(me->now_time, me->i, P_TAKEN_FORK);
 		me->status = P_EATING;
 		p->remain_eat_time[me->i]--;
-		me->now_time = get_time();
 		me->lasteat_time = me->now_time;
 	}
 	else if (me->status == P_EATING
