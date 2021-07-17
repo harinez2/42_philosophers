@@ -1,21 +1,9 @@
 #include "main.h"
 
-static int	init_param(t_params *p, int argc, char **argv)
+static void	init_param_arr(t_params *p)
 {
 	int			i;
 
-	if (ft_atoi(argv[1], &p->num_of_philo) == -1)
-		return (-1);
-	if (ft_atoi(argv[2], &p->ttdie) == -1)
-		return (-1);
-	if (ft_atoi(argv[3], &p->tteat) == -1)
-		return (-1);
-	if (ft_atoi(argv[4], &p->ttsleep) == -1)
-		return (-1);
-	p->num_of_times_each_philo_must_eat = -1;
-	if (argc == 6
-		&& ft_atoi(argv[5], &p->num_of_times_each_philo_must_eat) == -1)
-		return (-1);
 	i = 0;
 	while (i < p->num_of_philo)
 	{
@@ -26,21 +14,42 @@ static int	init_param(t_params *p, int argc, char **argv)
 		i++;
 	}
 	p->someone_dead = 0;
+}
+
+static int	init_param(t_params *p, int argc, char **argv)
+{
+	if (ft_atoi(argv[1], &p->num_of_philo) == -1)
+		error_exit(ERR_PARAM);
+	if (ft_atoi(argv[2], &p->ttdie) == -1)
+		error_exit(ERR_PARAM);
+	if (ft_atoi(argv[3], &p->tteat) == -1)
+		error_exit(ERR_PARAM);
+	if (ft_atoi(argv[4], &p->ttsleep) == -1)
+		error_exit(ERR_PARAM);
+	p->num_of_times_each_philo_must_eat = -1;
+	if (argc == 6
+		&& ft_atoi(argv[5], &p->num_of_times_each_philo_must_eat) == -1)
+		error_exit(ERR_PARAM);
+	if (MAX_PHILOSOPHERS < p->num_of_philo)
+		error_exit(ERR_MAX_PHILOSOPHERS);
+	else if (p->num_of_philo < 1 || p->ttdie < 0 || INT_MAX < p->ttdie
+		|| p->tteat < 0 || INT_MAX < p->tteat
+		|| p->ttsleep < 0 || INT_MAX < p->ttsleep)
+		error_exit(ERR_PARAM);
+	init_param_arr(p);
 	return (0);
 }
 
 int	main(int argc, char **argv)
 {
 	int				i;
-	pthread_t		t[MAX_PHILOSPHERS];
+	pthread_t		t[MAX_PHILOSOPHERS];
 	t_params		p;
 
 	if (argc < 5 || 6 < argc)
 		print_usage_exit();
 	if (init_param(&p, argc, argv) == -1)
 		return (-1);
-	if (p.num_of_philo > MAX_PHILOSPHERS)
-		error_exit(ERR_MAX_PHILOSPHERS);
 	i = 0;
 	while (i < p.num_of_philo)
 	{
