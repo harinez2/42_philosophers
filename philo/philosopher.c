@@ -32,6 +32,7 @@ static void	change_status(t_params *p, t_phi *me)
 		p->fork[me->i] = 0;
 		p->fork[(me->i + 1) % p->num_of_philo] = 0;
 		print_status(me->now_time, me->i, P_TAKEN_FORK);
+		print_status(me->now_time, me->i, P_TAKEN_FORK);
 		me->status = P_EATING;
 		p->remain_eat_time[me->i]--;
 		me->lasteat_time = me->now_time;
