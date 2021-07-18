@@ -16,7 +16,7 @@ static void	init_param_arr(t_params *p)
 	p->someone_dead = 0;
 }
 
-static int	init_param(t_params *p, int argc, char **argv)
+static void	init_param(t_params *p, int argc, char **argv)
 {
 	if (ft_atoi(argv[1], &p->num_of_philo) == -1)
 		error_exit(ERR_PARAM);
@@ -37,7 +37,6 @@ static int	init_param(t_params *p, int argc, char **argv)
 		|| p->ttsleep < 0 || INT_MAX < p->ttsleep)
 		error_exit(ERR_PARAM);
 	init_param_arr(p);
-	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -48,8 +47,7 @@ int	main(int argc, char **argv)
 
 	if (argc < 5 || 6 < argc)
 		print_usage_exit();
-	if (init_param(&p, argc, argv) == -1)
-		return (-1);
+	init_param(&p, argc, argv);
 	i = 0;
 	while (i < p.num_of_philo)
 	{
