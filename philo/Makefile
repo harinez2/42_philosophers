@@ -1,6 +1,7 @@
 NAME		= philo
 SRCS		= \
 				libft.c \
+				libutil.c \
 				error.c \
 				philosopher.c \
 				main.c

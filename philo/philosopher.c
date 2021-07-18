@@ -1,13 +1,5 @@
 #include "main.h"
 
-static long	get_time(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return ((long)tv.tv_sec * 1000 + (int)(tv.tv_usec / 1000));
-}
-
 static void	print_status(long time, int who, int something)
 {
 	if (something == P_TAKEN_FORK)
@@ -25,8 +17,7 @@ static void	print_status(long time, int who, int something)
 static void	change_status(t_params *p, t_phi *me)
 {
 	me->now_time = get_time();
-	if (me->status == P_THINKING
-		&& p->fork[me->i] == 1
+	if (me->status == P_THINKING && p->fork[me->i] == 1
 		&& p->fork[(me->i + 1) % p->num_of_philo] == 1)
 	{
 		p->fork[me->i] = 0;
@@ -52,7 +43,7 @@ static void	change_status(t_params *p, t_phi *me)
 	print_status(me->now_time, me->i, me->status);
 }
 
-static int	is_finished(t_params *p)
+static int	is_in_finished_condition(t_params *p)
 {
 	int			i;
 
@@ -60,14 +51,17 @@ static int	is_finished(t_params *p)
 		return (1);
 	if (p->num_of_times_each_philo_must_eat == -1)
 		return (0);
-	i = 0;
-	while (i < p->num_of_philo)
+	else
 	{
-		if (p->remain_eat_time[i] > 0)
-			return (0);
-		i++;
+		i = 0;
+		while (i < p->num_of_philo)
+		{
+			if (p->remain_eat_time[i] > 0)
+				return (0);
+			i++;
+		}
+		return (1);
 	}
-	return (1);
 }
 
 void	*philosopher(void *arg)
@@ -78,11 +72,11 @@ void	*philosopher(void *arg)
 	p = (t_params *)arg;
 	me.i = p->i;
 	pthread_mutex_unlock(&g_mtx);
-	me.lasteat_time = get_time();
+	me.lasteat_time = p->start_time;
 	me.status = P_THINKING;
 	while (1)
 	{
-		if (is_finished(p) == 1)
+		if (is_in_finished_condition(p) == 1)
 			return (NULL);
 		me.now_time = get_time();
 		if (me.now_time - me.lasteat_time > p->ttdie)
@@ -92,7 +86,9 @@ void	*philosopher(void *arg)
 		pthread_mutex_unlock(&g_mtx);
 		usleep(5);
 	}
-	print_status(me.now_time, me.i, P_DIED);
+	pthread_mutex_lock(&g_mtx);
 	p->someone_dead++;
+	pthread_mutex_unlock(&g_mtx);
+	print_status(me.now_time, me.i, P_DIED);
 	return (NULL);
 }

@@ -33,6 +33,7 @@ typedef struct s_params
 	int		ttsleep;
 	int		num_of_times_each_philo_must_eat;
 	int		i;
+	long	start_time;
 	int		fork[MAX_PHILOSOPHERS];
 	int		remain_eat_time[MAX_PHILOSOPHERS];
 	int		someone_dead;
@@ -49,6 +50,8 @@ typedef struct s_phi
 void	*philosopher(void *arg);
 
 int		ft_atoi(char *s, int *errflg);
+
+long	get_time(void);
 
 void	error_exit(int errcode);
 void	print_usage_exit(void);

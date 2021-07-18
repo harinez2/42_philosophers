@@ -8,12 +8,14 @@ static void	init_param_arr(t_params *p)
 	while (i < p->num_of_philo)
 	{
 		p->fork[i] = 1;
-		p->remain_eat_time[i] = 0;
-		if (p->num_of_times_each_philo_must_eat != -1)
+		if (p->num_of_times_each_philo_must_eat == -1)
+			p->remain_eat_time[i] = 0;
+		else
 			p->remain_eat_time[i] = p->num_of_times_each_philo_must_eat;
 		i++;
 	}
 	p->someone_dead = 0;
+	pthread_mutex_init(&g_mtx, NULL);
 }
 
 static void	init_param(t_params *p, int argc, char **argv)
@@ -48,6 +50,7 @@ int	main(int argc, char **argv)
 	if (argc < 5 || 6 < argc)
 		print_usage_exit();
 	init_param(&p, argc, argv);
+	p.start_time = get_time();
 	i = 0;
 	while (i < p.num_of_philo)
 	{
@@ -59,5 +62,6 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < p.num_of_philo)
 		pthread_join(t[i++], NULL);
+	pthread_mutex_destroy(&g_mtx);
 	return (0);
 }
