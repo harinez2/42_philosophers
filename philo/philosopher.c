@@ -19,6 +19,8 @@ static int	check_eatable(t_status *s, int i)
 	int		left;
 	int		right;
 
+	if (s->param.num_of_philo <= 1)
+		return (0);
 	left = (s->param.num_of_philo + i - 1) % s->param.num_of_philo;
 	right = (i + 1) % s->param.num_of_philo;
 	if (s->fork[i] == 1 && s->fork[right] == 1)
