@@ -89,7 +89,7 @@ void	*philosopher(void *arg)
 
 	s = (t_status *)arg;
 	i = s->tmp_i;
-	pthread_mutex_unlock(&g_mtx);
+	pthread_mutex_unlock(&s->mtx);
 	while (1)
 	{
 		if (is_in_finished_condition(s) == 1)
@@ -97,14 +97,14 @@ void	*philosopher(void *arg)
 		s->ph[i].now_time = get_time();
 		if (s->ph[i].now_time - s->ph[i].lasteat_time > s->param.ttdie)
 			break ;
-		pthread_mutex_lock(&g_mtx);
+		pthread_mutex_lock(&s->mtx);
 		change_status(s, i);
-		pthread_mutex_unlock(&g_mtx);
+		pthread_mutex_unlock(&s->mtx);
 		usleep(5);
 	}
-	pthread_mutex_lock(&g_mtx);
+	pthread_mutex_lock(&s->mtx);
 	s->someone_dead++;
-	pthread_mutex_unlock(&g_mtx);
+	pthread_mutex_unlock(&s->mtx);
 	print_status(s->ph[i].now_time, i, P_DIED);
 	return (NULL);
 }

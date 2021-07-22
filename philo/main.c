@@ -19,7 +19,7 @@ static void	init_param(t_status *s)
 		i++;
 	}
 	s->someone_dead = 0;
-	pthread_mutex_init(&g_mtx, NULL);
+	pthread_mutex_init(&s->mtx, NULL);
 }
 
 static void	read_param(t_param *p, int argc, char **argv)
@@ -57,7 +57,7 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < s.param.num_of_philo)
 	{
-		pthread_mutex_lock(&g_mtx);
+		pthread_mutex_lock(&s.mtx);
 		s.tmp_i = i;
 		pthread_create(&t[i], NULL, philosopher, &s);
 		i++;
@@ -65,6 +65,6 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < s.param.num_of_philo)
 		pthread_join(t[i++], NULL);
-	pthread_mutex_destroy(&g_mtx);
+	pthread_mutex_destroy(&s.mtx);
 	return (0);
 }

@@ -23,8 +23,6 @@
 # define	ERR_FAILED_TO_FORK		-5
 # define	ERR_FAILED_TO_WAIT		-6
 
-pthread_mutex_t	g_mtx;
-
 typedef struct s_param
 {
 	int		num_of_philo;
@@ -45,12 +43,13 @@ typedef struct s_phi
 
 typedef struct s_status
 {
-	long	start_time;
-	int		fork[MAX_PHILOSOPHERS];
-	int		someone_dead;
-	t_phi	ph[MAX_PHILOSOPHERS];
-	t_param	param;
-	int		tmp_i;
+	long			start_time;
+	int				fork[MAX_PHILOSOPHERS];
+	int				someone_dead;
+	t_phi			ph[MAX_PHILOSOPHERS];
+	t_param			param;
+	int				tmp_i;
+	pthread_mutex_t	mtx;
 }	t_status;
 
 void	*philosopher(void *arg);
