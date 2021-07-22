@@ -3,7 +3,8 @@ SRCS		= \
 				libft.c \
 				libutil.c \
 				error.c \
-				philosopher.c \
+				philo.c \
+				philo_behavior.c \
 				main.c
 HEADERS		= main.h
 OBJS		= $(SRCS:.c=.o)

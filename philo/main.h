@@ -32,6 +32,12 @@ typedef struct s_param
 	int		times_must_eat;
 }	t_param;
 
+typedef struct s_fork
+{
+	int				i;
+	pthread_mutex_t	mtx;
+}	t_fork;
+
 typedef struct s_phi
 {
 	int			i;
@@ -44,7 +50,7 @@ typedef struct s_phi
 typedef struct s_status
 {
 	long			start_time;
-	int				fork[MAX_PHILOSOPHERS];
+	t_fork			fork[MAX_PHILOSOPHERS];
 	int				someone_dead;
 	t_phi			ph[MAX_PHILOSOPHERS];
 	t_param			param;
@@ -52,6 +58,9 @@ typedef struct s_status
 	pthread_mutex_t	mtx;
 }	t_status;
 
+void	change_status(t_status *s, int i);
+
+void	print_status(long time, int who, int something);
 void	*philosopher(void *arg);
 
 int		ft_atoi(char *s, int *errflg);

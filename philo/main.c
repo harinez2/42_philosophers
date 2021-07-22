@@ -15,7 +15,7 @@ static void	init_param(t_status *s)
 			s->ph[i].remain_eat_time = 0;
 		else
 			s->ph[i].remain_eat_time = s->param.times_must_eat;
-		s->fork[i] = 1;
+		s->fork[i].i = 1;
 		i++;
 	}
 	s->someone_dead = 0;
