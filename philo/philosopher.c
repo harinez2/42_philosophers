@@ -14,49 +14,50 @@ static void	print_status(long time, int who, int something)
 		printf("%ld %d died\n", time, ++who);
 }
 
-static void	change_status(t_params *p, t_phi *me)
+static void	change_status(t_status *s, int i)
 {
-	me->now_time = get_time();
-	if (me->status == P_THINKING && p->fork[me->i] == 1
-		&& p->fork[(me->i + 1) % p->num_of_philo] == 1)
+	s->ph[i].now_time = get_time();
+	if (s->ph[i].status == P_THINKING && s->fork[i] == 1
+		&& s->fork[(i + 1) % s->param.num_of_philo] == 1)
 	{
-		p->fork[me->i] = 0;
-		p->fork[(me->i + 1) % p->num_of_philo] = 0;
-		print_status(me->now_time, me->i, P_TAKEN_FORK);
-		print_status(me->now_time, me->i, P_TAKEN_FORK);
-		me->status = P_EATING;
-		p->remain_eat_time[me->i]--;
-		me->lasteat_time = me->now_time;
+		s->fork[i] = 0;
+		s->fork[(i + 1) % s->param.num_of_philo] = 0;
+		print_status(s->ph[i].now_time, i, P_TAKEN_FORK);
+		print_status(s->ph[i].now_time, i, P_TAKEN_FORK);
+		s->ph[i].status = P_EATING;
+		s->ph[i].remain_eat_time--;
+		s->ph[i].lasteat_time = s->ph[i].now_time;
 	}
-	else if (me->status == P_EATING
-		&& me->now_time - me->lasteat_time > p->tteat)
+	else if (s->ph[i].status == P_EATING
+		&& s->ph[i].now_time - s->ph[i].lasteat_time > s->param.tteat)
 	{
-		p->fork[me->i] = 1;
-		p->fork[(me->i + 1) % p->num_of_philo] = 1;
-		me->status = P_SLEEPING;
+		s->fork[i] = 1;
+		s->fork[(i + 1) % s->param.num_of_philo] = 1;
+		s->ph[i].status = P_SLEEPING;
 	}
-	else if (me->status == P_SLEEPING
-		&& me->now_time - me->lasteat_time > p->tteat + p->ttsleep)
-		me->status = P_THINKING;
+	else if (s->ph[i].status == P_SLEEPING
+		&& s->ph[i].now_time - s->ph[i].lasteat_time
+		> s->param.tteat + s->param.ttsleep)
+		s->ph[i].status = P_THINKING;
 	else
 		return ;
-	print_status(me->now_time, me->i, me->status);
+	print_status(s->ph[i].now_time, i, s->ph[i].status);
 }
 
-static int	is_in_finished_condition(t_params *p)
+static int	is_in_finished_condition(t_status *s)
 {
 	int			i;
 
-	if (p->someone_dead > 0)
+	if (s->someone_dead > 0)
 		return (1);
-	if (p->num_of_times_each_philo_must_eat == -1)
+	if (s->param.times_must_eat == -1)
 		return (0);
 	else
 	{
 		i = 0;
-		while (i < p->num_of_philo)
+		while (i < s->param.num_of_philo)
 		{
-			if (p->remain_eat_time[i] > 0)
+			if (s->ph[i].remain_eat_time > 0)
 				return (0);
 			i++;
 		}
@@ -66,29 +67,27 @@ static int	is_in_finished_condition(t_params *p)
 
 void	*philosopher(void *arg)
 {
-	t_params	*p;
-	t_phi		me;
+	t_status	*s;
+	int			i;
 
-	p = (t_params *)arg;
-	me.i = p->i;
+	s = (t_status *)arg;
+	i = s->tmp_i;
 	pthread_mutex_unlock(&g_mtx);
-	me.lasteat_time = p->start_time;
-	me.status = P_THINKING;
 	while (1)
 	{
-		if (is_in_finished_condition(p) == 1)
+		if (is_in_finished_condition(s) == 1)
 			return (NULL);
-		me.now_time = get_time();
-		if (me.now_time - me.lasteat_time > p->ttdie)
+		s->ph[i].now_time = get_time();
+		if (s->ph[i].now_time - s->ph[i].lasteat_time > s->param.ttdie)
 			break ;
 		pthread_mutex_lock(&g_mtx);
-		change_status(p, &me);
+		change_status(s, i);
 		pthread_mutex_unlock(&g_mtx);
 		usleep(5);
 	}
 	pthread_mutex_lock(&g_mtx);
-	p->someone_dead++;
+	s->someone_dead++;
 	pthread_mutex_unlock(&g_mtx);
-	print_status(me.now_time, me.i, P_DIED);
+	print_status(s->ph[i].now_time, i, P_DIED);
 	return (NULL);
 }

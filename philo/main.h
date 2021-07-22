@@ -25,27 +25,33 @@
 
 pthread_mutex_t	g_mtx;
 
-typedef struct s_params
+typedef struct s_param
 {
 	int		num_of_philo;
 	int		ttdie;
 	int		tteat;
 	int		ttsleep;
-	int		num_of_times_each_philo_must_eat;
-	int		i;
-	long	start_time;
-	int		fork[MAX_PHILOSOPHERS];
-	int		remain_eat_time[MAX_PHILOSOPHERS];
-	int		someone_dead;
-}	t_params;
+	int		times_must_eat;
+}	t_param;
 
 typedef struct s_phi
 {
-	int		i;
-	long	lasteat_time;
-	long	now_time;
-	int		status;
+	int			i;
+	long		lasteat_time;
+	long		now_time;
+	int			status;
+	int			remain_eat_time;
 }	t_phi;
+
+typedef struct s_status
+{
+	long	start_time;
+	int		fork[MAX_PHILOSOPHERS];
+	int		someone_dead;
+	t_phi	ph[MAX_PHILOSOPHERS];
+	t_param	param;
+	int		tmp_i;
+}	t_status;
 
 void	*philosopher(void *arg);
 
