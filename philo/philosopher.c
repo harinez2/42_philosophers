@@ -14,11 +14,28 @@ static void	print_status(long time, int who, int something)
 		printf("%ld %d died\n", time, ++who);
 }
 
+static int	check_eatable(t_status *s, int i)
+{
+	int		left;
+	int		right;
+
+	left = (s->param.num_of_philo + i - 1) % s->param.num_of_philo;
+	right = (i + 1) % s->param.num_of_philo;
+	if (s->fork[i] == 1 && s->fork[right] == 1)
+	{
+		if (s->ph[left].lasteat_time >= s->ph[i].lasteat_time
+			&& s->ph[i].lasteat_time <= s->ph[right].lasteat_time)
+		{
+			return (1);
+		}
+	}
+	return (0);
+}
+
 static void	change_status(t_status *s, int i)
 {
 	s->ph[i].now_time = get_time();
-	if (s->ph[i].status == P_THINKING && s->fork[i] == 1
-		&& s->fork[(i + 1) % s->param.num_of_philo] == 1)
+	if (s->ph[i].status == P_THINKING && check_eatable(s, i))
 	{
 		s->fork[i] = 0;
 		s->fork[(i + 1) % s->param.num_of_philo] = 0;
