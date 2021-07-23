@@ -1,6 +1,6 @@
 #include "main.h"
 
-void	error_exit(int errcode)
+int	print_error(int errcode)
 {
 	if (errcode == ERR_PARAM)
 		printf("Error: The specified parameter is invalid.\n");
@@ -17,7 +17,7 @@ void	error_exit(int errcode)
 		printf("Error: Failed to wait.\n");
 	else
 		printf("Error\n");
-	exit(-1);
+	return (-1);
 }
 
 void	print_usage_exit(void)

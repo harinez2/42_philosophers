@@ -71,7 +71,7 @@ int		ft_atoi(char *s, int *errflg);
 
 long	get_time(void);
 
-void	error_exit(int errcode);
+int		print_error(int errcode);
 void	print_usage_exit(void);
 
 #endif

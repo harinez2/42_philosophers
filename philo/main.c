@@ -36,26 +36,27 @@ static void	init_param(t_status *s)
 	pthread_mutex_init(&s->mtx, NULL);
 }
 
-static void	read_param(t_param *p, int argc, char **argv)
+static int	read_param(t_param *p, int argc, char **argv)
 {
 	if (ft_atoi(argv[1], &p->num_of_philo) == -1)
-		error_exit(ERR_PARAM);
+		return (print_error(ERR_PARAM));
 	if (ft_atoi(argv[2], &p->ttdie) == -1)
-		error_exit(ERR_PARAM);
+		return (print_error(ERR_PARAM));
 	if (ft_atoi(argv[3], &p->tteat) == -1)
-		error_exit(ERR_PARAM);
+		return (print_error(ERR_PARAM));
 	if (ft_atoi(argv[4], &p->ttsleep) == -1)
-		error_exit(ERR_PARAM);
+		return (print_error(ERR_PARAM));
 	p->times_must_eat = -1;
 	if (argc == 6
 		&& ft_atoi(argv[5], &p->times_must_eat) == -1)
-		error_exit(ERR_PARAM);
+		return (print_error(ERR_PARAM));
 	if (MAX_PHILOSOPHERS < p->num_of_philo)
-		error_exit(ERR_MAX_PHILOSOPHERS);
+		return (print_error(ERR_MAX_PHILOSOPHERS));
 	else if (p->num_of_philo < 1 || p->ttdie < 0 || INT_MAX < p->ttdie
 		|| p->tteat < 0 || INT_MAX < p->tteat
 		|| p->ttsleep < 0 || INT_MAX < p->ttsleep)
-		error_exit(ERR_PARAM);
+		return (print_error(ERR_PARAM));
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -66,7 +67,8 @@ int	main(int argc, char **argv)
 
 	if (argc < 5 || 6 < argc)
 		print_usage_exit();
-	read_param(&s.param, argc, argv);
+	if (read_param(&s.param, argc, argv) == -1)
+		return (-1);
 	init_param(&s);
 	i = 0;
 	while (i < s.param.num_of_philo)
