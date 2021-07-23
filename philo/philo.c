@@ -2,16 +2,19 @@
 
 void	print_status(long time, int who, int something)
 {
+	print_num(time);
+	ft_putchars(" ");
+	print_num(++who);
 	if (something == P_TAKEN_FORK)
-		printf("%ld %d has taken a fork\n", time, ++who);
+		ft_putchars(" has taken a fork\n");
 	else if (something == P_EATING)
-		printf("%ld %d is eating\n", time, ++who);
+		ft_putchars(" is eating\n");
 	else if (something == P_SLEEPING)
-		printf("%ld %d is sleeping\n", time, ++who);
+		ft_putchars(" is sleeping\n");
 	else if (something == P_THINKING)
-		printf("%ld %d is thinking\n", time, ++who);
+		ft_putchars(" is thinking\n");
 	else if (something == P_DIED)
-		printf("%ld %d died\n", time, ++who);
+		ft_putchars(" died\n");
 }
 
 static int	is_in_finished_condition(t_status *s)
@@ -43,20 +46,25 @@ void	*philosopher(void *arg)
 	s = (t_status *)arg;
 	i = s->tmp_i;
 	pthread_mutex_unlock(&s->mtx);
+	if (i % 2 == 0)
+		usleep(5);
 	while (1)
 	{
+		pthread_mutex_lock(&s->mtx);
 		if (is_in_finished_condition(s) == 1)
+		{
+			pthread_mutex_unlock(&s->mtx);
 			return (NULL);
+		}
 		s->ph[i].now_time = get_time();
 		if (s->ph[i].now_time - s->ph[i].lasteat_time > s->param.ttdie)
 			break ;
-		pthread_mutex_lock(&s->mtx);
 		change_status(s, i);
 		pthread_mutex_unlock(&s->mtx);
 		usleep(5);
 	}
-	pthread_mutex_lock(&s->mtx);
 	s->someone_dead++;
+	s->dead_time = s->ph[i].now_time;
 	pthread_mutex_unlock(&s->mtx);
 	print_status(s->ph[i].now_time, i, P_DIED);
 	return (NULL);

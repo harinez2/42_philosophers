@@ -1,5 +1,18 @@
 #include "main.h"
 
+static void	destroy_param(t_status *s)
+{
+	int			i;
+
+	i = 0;
+	while (i < s->param.num_of_philo)
+	{
+		pthread_mutex_destroy(&s->fork[i].mtx);
+		i++;
+	}
+	pthread_mutex_destroy(&s->mtx);
+}
+
 static void	init_param(t_status *s)
 {
 	int			i;
@@ -15,6 +28,7 @@ static void	init_param(t_status *s)
 			s->ph[i].remain_eat_time = 0;
 		else
 			s->ph[i].remain_eat_time = s->param.times_must_eat;
+		pthread_mutex_init(&s->fork[i].mtx, NULL);
 		s->fork[i].i = 1;
 		i++;
 	}
@@ -65,6 +79,6 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < s.param.num_of_philo)
 		pthread_join(t[i++], NULL);
-	pthread_mutex_destroy(&s.mtx);
+	destroy_param(&s);
 	return (0);
 }

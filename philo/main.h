@@ -52,6 +52,7 @@ typedef struct s_status
 	long			start_time;
 	t_fork			fork[MAX_PHILOSOPHERS];
 	int				someone_dead;
+	long			dead_time;
 	t_phi			ph[MAX_PHILOSOPHERS];
 	t_param			param;
 	int				tmp_i;
@@ -63,6 +64,9 @@ void	change_status(t_status *s, int i);
 void	print_status(long time, int who, int something);
 void	*philosopher(void *arg);
 
+size_t	ft_strlen(const char *str);
+void	ft_putchars(char *s);
+void	print_num(long d);
 int		ft_atoi(char *s, int *errflg);
 
 long	get_time(void);
