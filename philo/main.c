@@ -66,7 +66,7 @@ int	main(int argc, char **argv)
 	t_status		s;
 
 	if (argc < 5 || 6 < argc)
-		print_usage_exit();
+		return (print_error(ERR_PARAM));
 	if (read_param(&s.param, argc, argv) == -1)
 		return (-1);
 	init_param(&s);
