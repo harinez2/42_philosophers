@@ -59,7 +59,7 @@ typedef struct s_status
 	pthread_mutex_t	mtx;
 }	t_status;
 
-void	change_status(t_status *s, int i);
+int		change_status(t_status *s, int i);
 
 void	print_status(long time, int who, int something);
 void	*philosopher(void *arg);
