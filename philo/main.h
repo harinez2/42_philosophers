@@ -9,7 +9,7 @@
 # include <errno.h>
 # include <limits.h>
 
-# define	MAX_PHILOSOPHERS	100
+# define	MAX_PHILOSOPHERS	200
 # define	P_TAKEN_FORK		1
 # define	P_EATING			2
 # define	P_SLEEPING			3
