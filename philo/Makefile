@@ -16,7 +16,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
-debug: $(SRCS) $(HEADERS)
+debug: $(SRCS)
 	$(CC) $(CFLAGS) $(DBGFLG) $(SRCS) -o $(NAME)
 
 clean:
