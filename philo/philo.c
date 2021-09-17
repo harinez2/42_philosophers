@@ -100,7 +100,7 @@ static int	philosopher_doing(t_status *s, int i)
 	// else if (ret == P_SLEEPING)
 	// 	usleep_exact(s->param.ttsleep * 1000);
 	// else
-	usleep_exact(200);
+	usleep_exact(500);
 	// usleep_exact(calc_waittime(s, i,
 	// 	s->ph[i].now_time - s->ph[i].seq_start_time));
 	return (0);
