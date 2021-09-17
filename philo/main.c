@@ -23,6 +23,7 @@ static void	init_param(t_status *s)
 	{
 		s->ph[i].i = i;
 		s->ph[i].lasteat_time = s->start_time;
+		s->ph[i].seq_start_time = s->start_time;
 		s->ph[i].status = P_THINKING;
 		if (s->param.times_must_eat == -1)
 			s->ph[i].remain_eat_time = 0;
@@ -33,6 +34,7 @@ static void	init_param(t_status *s)
 		i++;
 	}
 	s->someone_dead = 0;
+	s->num_of_philo_ate = 0;
 	pthread_mutex_init(&s->mtx, NULL);
 }
 

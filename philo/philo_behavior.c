@@ -17,10 +17,12 @@ static int	change_status_to_eating(t_status *s, int i)
 		print_status(s->ph[i].now_time, i, P_TAKEN_FORK);
 		print_status(s->ph[i].now_time, i, P_TAKEN_FORK);
 		s->ph[i].status = P_EATING;
-		s->ph[i].remain_eat_time--;
 		s->ph[i].lasteat_time = s->ph[i].now_time;
 		print_status(s->ph[i].now_time, i, s->ph[i].status);
 		ret = P_EATING;
+		s->ph[i].remain_eat_time--;
+		if (s->param.times_must_eat != -1 && s->ph[i].remain_eat_time == 0)
+			s->num_of_philo_ate++;
 	}
 	pthread_mutex_unlock(&s->fork[(i + 1) % s->param.num_of_philo].mtx);
 	pthread_mutex_unlock(&s->fork[i].mtx);

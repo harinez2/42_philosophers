@@ -16,6 +16,9 @@
 # define	P_THINKING			4
 # define	P_DIED				5
 
+# define	ST_PHILO_DEAD		1
+# define	ST_SIMUL_FINISHED	2
+
 # define	ERR_PARAM				-1
 # define	ERR_MAX_PHILOSOPHERS	-2
 # define	ERR_SEM_OPEN			-3
@@ -41,6 +44,7 @@ typedef struct s_fork
 typedef struct s_phi
 {
 	int			i;
+	long		seq_start_time;
 	long		lasteat_time;
 	long		now_time;
 	int			status;
@@ -53,6 +57,7 @@ typedef struct s_status
 	t_fork			fork[MAX_PHILOSOPHERS];
 	int				someone_dead;
 	long			dead_time;
+	int				num_of_philo_ate;
 	t_phi			ph[MAX_PHILOSOPHERS];
 	t_param			param;
 	int				tmp_i;
@@ -70,6 +75,7 @@ void	print_num(long d);
 int		ft_atoi(char *s, int *errflg);
 
 long	get_time(void);
+void	usleep_exact(long time_in_usec);
 
 int		print_error(int errcode);
 void	print_usage_exit(void);
