@@ -34,75 +34,41 @@ void	print_status(long time, int who, int something)
 
 static int	is_in_finished_condition(t_status *s)
 {
-	// int			i;
+	int		finish_flg;
 
+	finish_flg = 0;
+	pthread_mutex_lock(&s->mtx);
 	if (s->someone_dead > 0)
-		return (1);
-	if (s->param.times_must_eat == -1)
-		return (0);
+		finish_flg = 1;
 	else if (s->param.times_must_eat > 0
 		&& s->num_of_philo_ate == s->param.num_of_philo)
-	{
-		// i = 0;
-		// while (i < s->param.num_of_philo)
-		// {
-		// 	if (s->ph[i].remain_eat_time > 0)
-		// 		return (0);
-		// 	i++;
-		// }
-		return (1);
-	}
-	return (0);
+		finish_flg = 1;
+	pthread_mutex_unlock(&s->mtx);
+	return (finish_flg);
 }
 
-// static int	calc_waittime(t_status *s, int i, int diff_time)
-// {
-// 	unsigned int		seq;
-// 	int		order;
-// 	int		ret;
+static void	sleep_some(t_status *s, int i)
+{
+	int		haif_time_to_die;
 
-// 	seq = diff_time / s->param.tteat;
-// 	if (seq % (unsigned int)s->param.num_of_philo == 0)
-// 	{
-// 		s->ph[i].seq_start_time = s->ph[i].now_time;
-// 		seq %= s->param.num_of_philo;
-// 	}
-// 	order = (i + 1) % 2;
-// 	if (seq >= (unsigned int)i + 2 || (seq == 0 && i == s->param.num_of_philo - 1))
-// 		order = (order + 1) % 2;
-// 	// printf("   i%d:order%d:seq%d:difftime%d:timemusteat%d\n", i, order, seq, diff_time, s->param.tteat);
-// 	if (order)
-// 		ret = 500;
-// 		// return (50);
-// 	else
-// 		ret = s->param.tteat * 1000;
-// 		// return (s->param.tteat * 1000);
-// 	// printf("      ret%d\n", ret);
-// 	return (ret);
-// }
+	haif_time_to_die = (s->param.ttdie - s->param.tteat - s->param.ttsleep) / 2;
+	if (s->param.num_of_philo % 2 == 0)
+		usleep_exact(1000);
+	else if (s->ph[i].lasteat_time + haif_time_to_die < s->ph[i].now_time)
+		usleep_exact(1000);
+	else
+		usleep_exact(3000);
+}
 
 static int	philosopher_doing(t_status *s, int i)
 {
-	// int			ret;
-
-	// pthread_mutex_lock(&s->mtx);
 	if (is_in_finished_condition(s) == 1)
 		return (ST_SIMUL_FINISHED);
 	s->ph[i].now_time = get_time();
 	if (s->ph[i].now_time - s->ph[i].lasteat_time > s->param.ttdie)
 		return (ST_PHILO_DEAD);
-	// ret = change_status(s, i);
 	change_status(s, i);
-	// pthread_mutex_unlock(&s->mtx);
-
-	// if (ret == P_EATING)
-	// 	usleep_exact(s->param.tteat * 1000);
-	// else if (ret == P_SLEEPING)
-	// 	usleep_exact(s->param.ttsleep * 1000);
-	// else
-	usleep_exact(500);
-	// usleep_exact(calc_waittime(s, i,
-	// 	s->ph[i].now_time - s->ph[i].seq_start_time));
+	sleep_some(s, i);
 	return (0);
 }
 
@@ -115,9 +81,8 @@ void	*philosopher(void *arg)
 	s = (t_status *)arg;
 	i = s->tmp_i;
 	pthread_mutex_unlock(&s->mtx);
-	if (i % 2 == 0)
+	if (i % 2 == 1)
 		usleep_exact(2000);
-		// usleep_exact(s->param.num_of_philo * 10);
 	while (1)
 	{
 		ret = philosopher_doing(s, i);

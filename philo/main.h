@@ -48,7 +48,7 @@ typedef struct s_phi
 	long		lasteat_time;
 	long		now_time;
 	int			status;
-	int			remain_eat_time;
+	long		eat_cnt;
 }	t_phi;
 
 typedef struct s_status

@@ -20,8 +20,9 @@ static int	change_status_to_eating(t_status *s, int i)
 		s->ph[i].lasteat_time = s->ph[i].now_time;
 		print_status(s->ph[i].now_time, i, s->ph[i].status);
 		ret = P_EATING;
-		s->ph[i].remain_eat_time--;
-		if (s->param.times_must_eat != -1 && s->ph[i].remain_eat_time == 0)
+		s->ph[i].eat_cnt++;
+		if (s->param.times_must_eat != -1
+			&& s->ph[i].eat_cnt >= s->param.times_must_eat)
 			s->num_of_philo_ate++;
 	}
 	pthread_mutex_unlock(&s->fork[(i + 1) % s->param.num_of_philo].mtx);

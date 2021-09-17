@@ -25,10 +25,7 @@ static void	init_param(t_status *s)
 		s->ph[i].lasteat_time = s->start_time;
 		s->ph[i].seq_start_time = s->start_time;
 		s->ph[i].status = P_THINKING;
-		if (s->param.times_must_eat == -1)
-			s->ph[i].remain_eat_time = 0;
-		else
-			s->ph[i].remain_eat_time = s->param.times_must_eat;
+		s->ph[i].eat_cnt = 0;
 		pthread_mutex_init(&s->fork[i].mtx, NULL);
 		s->fork[i].i = 1;
 		i++;
