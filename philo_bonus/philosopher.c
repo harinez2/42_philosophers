@@ -29,6 +29,7 @@ static void	change_status(t_params *p, t_phi *me)
 	{
 		me->now_time = get_time();
 		print_status(me->now_time, me->i, P_TAKEN_FORK);
+		print_status(me->now_time, me->i, P_TAKEN_FORK);
 		me->status = P_EATING;
 		p->remain_eat_time--;
 		me->lasteat_time = me->now_time;

@@ -1,24 +1,5 @@
 #include "main.h"
 
-static void	open_semaphore(char *sem_name, int sem_cnt, sem_t **sem)
-{
-	int		i;
-
-	i = 0;
-	while (i < SEM_OPEN_RETRY_MAX)
-	{
-		printf("trying to open sem : %s\n", sem_name);
-		*sem = sem_open(sem_name, O_CREAT | O_EXCL, 0600, sem_cnt);
-		if (*sem != SEM_FAILED)
-			break ;
-		sem_name[6]++;
-		i++;
-	}
-	if (*sem == SEM_FAILED && i == SEM_OPEN_RETRY_MAX)
-		error_exit(ERR_SEM_OPEN);
-	sem_unlink(sem_name);
-}
-
 static int	init_param(t_params *p, int argc, char **argv)
 {
 	if (ft_atoi(argv[1], &p->num_of_philo) == -1)
@@ -35,6 +16,24 @@ static int	init_param(t_params *p, int argc, char **argv)
 		return (-1);
 	p->remain_eat_time = p->num_of_times_each_philo_must_eat;
 	return (0);
+}
+
+static void	open_semaphore(char *sem_name, int sem_cnt, sem_t **sem)
+{
+	int		i;
+
+	i = 0;
+	while (i < SEM_OPEN_RETRY_MAX)
+	{
+		*sem = sem_open(sem_name, O_CREAT | O_EXCL, 0600, sem_cnt);
+		if (*sem != SEM_FAILED)
+			break ;
+		sem_name[6]++;
+		i++;
+	}
+	if (*sem == SEM_FAILED && i == SEM_OPEN_RETRY_MAX)
+		error_exit(ERR_SEM_OPEN);
+	sem_unlink(sem_name);
 }
 
 static void	create_philosophers(t_params *p, int *pid)
@@ -54,11 +53,25 @@ static void	create_philosophers(t_params *p, int *pid)
 	}
 }
 
-void	wait_all_philosophers(t_params *p, int *pid)
+static void	wait_all_philosophers(t_params *p, int *pid)
 {
 	int		i;
 	int		status;
 
+	// int ret = wait(&status);
+	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
+	// ret = wait(&status);
+	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
+	// ret = wait(&status);
+	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
+	// ret = wait(&status);
+	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
+	// ret = wait(&status);
+	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
+	// ret = wait(&status);
+	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
+	// ret = wait(&status);
+	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
 	if (sem_wait(g_sem_dead) == 0)
 	{
 		i = 0;
