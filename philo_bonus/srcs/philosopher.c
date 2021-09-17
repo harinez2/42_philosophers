@@ -22,7 +22,7 @@ static void	print_status(long time, int who, int something)
 		printf("%ld %d died\n", time, ++who);
 }
 
-static void	change_status(t_params *p, t_phi *me)
+static void	change_status(t_param *p, t_phi *me)
 {
 	if (me->status == P_THINKING
 		&& sem_wait(g_sem_philo) == 0)
@@ -48,7 +48,7 @@ static void	change_status(t_params *p, t_phi *me)
 	print_status(me->now_time, me->i, me->status);
 }
 
-static int	is_finished(t_params *p)
+static int	is_finished(t_param *p)
 {
 	int			i;
 
@@ -64,7 +64,7 @@ static int	is_finished(t_params *p)
 	return (1);
 }
 
-void	philosopher(t_params *p, int i)
+void	philosopher(t_param *p, int i)
 {
 	t_phi		me;
 

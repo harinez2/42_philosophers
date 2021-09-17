@@ -2,9 +2,9 @@
 
 void	error_exit(int errcode)
 {
-	if (errcode == ERR_MAX_PHILOSPHERS)
+	if (errcode == ERR_MAX_PHILOSOPHERS)
 		printf("Error: The max number of acceptable philosopher is %d.\n",
-			MAX_PHILOSPHERS);
+			MAX_PHILOSOPHERS);
 	else if (errcode == ERR_SEM_OPEN)
 		printf("Error: The environment value is invalid.\n");
 	else if (errcode == ERR_SEM_CLOSE)
