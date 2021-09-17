@@ -1,21 +1,16 @@
-#include "main.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/18 01:52:59 by yonishi           #+#    #+#             */
+/*   Updated: 2021/09/18 01:52:59 by yonishi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// void	print_status(long time, int who, int something)
-// {
-// 	print_num(time);
-// 	ft_putchars(" ");
-// 	print_num(++who);
-// 	if (something == P_TAKEN_FORK)
-// 		ft_putchars(" has taken a fork\n");
-// 	else if (something == P_EATING)
-// 		ft_putchars(" is eating\n");
-// 	else if (something == P_SLEEPING)
-// 		ft_putchars(" is sleeping\n");
-// 	else if (something == P_THINKING)
-// 		ft_putchars(" is thinking\n");
-// 	else if (something == P_DIED)
-// 		ft_putchars(" died\n");
-// }
+#include "main.h"
 
 void	print_status(long time, int who, int something)
 {
@@ -95,6 +90,5 @@ void	*philosopher(void *arg)
 		s->dead_time = s->ph[i].now_time;
 		print_status(s->ph[i].now_time, i, P_DIED);
 	}
-	// pthread_mutex_unlock(&s->mtx);
 	return (NULL);
 }

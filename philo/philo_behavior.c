@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_behavior.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/18 01:52:56 by yonishi           #+#    #+#             */
+/*   Updated: 2021/09/18 01:52:56 by yonishi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "main.h"
 
 static int	change_status_to_eating(t_status *s, int i)
@@ -5,8 +17,6 @@ static int	change_status_to_eating(t_status *s, int i)
 	int		ret;
 
 	ret = 0;
-	if (s->param.num_of_philo <= 1)
-		return (-1);
 	pthread_mutex_lock(&s->fork[i].mtx);
 	pthread_mutex_lock(&s->fork[(i + 1) % s->param.num_of_philo].mtx);
 	if (s->fork[i].i == 1
@@ -61,6 +71,8 @@ static int	change_status_to_thinking(t_status *s, int i)
 
 int	change_status(t_status *s, int i)
 {
+	if (s->param.num_of_philo <= 1)
+		return (-1);
 	if (s->ph[i].status == P_THINKING)
 		return (change_status_to_eating(s, i));
 	else if (s->ph[i].status == P_EATING)

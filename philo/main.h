@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/18 01:52:42 by yonishi           #+#    #+#             */
+/*   Updated: 2021/09/18 01:52:42 by yonishi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MAIN_H
 # define MAIN_H
 
@@ -64,20 +76,22 @@ typedef struct s_status
 	pthread_mutex_t	mtx;
 }	t_status;
 
-int		change_status(t_status *s, int i);
-
-void	print_status(long time, int who, int something);
-void	*philosopher(void *arg);
-
-size_t	ft_strlen(const char *str);
-void	ft_putchars(char *s);
-void	print_num(long d);
-int		ft_atoi(char *s, int *errflg);
-
-long	get_time(void);
-void	usleep_exact(long time_in_usec);
-
-int		print_error(int errcode);
-void	print_usage_exit(void);
+// error.c
+int			print_error(int errcode);
+// libft.c
+size_t		ft_strlen(const char *str);
+void		ft_putchars(char *s);
+void		print_num(long d);
+int			ft_atoi(char *s, int *retnum);
+// libutil.c
+long		get_time(void);
+void		usleep_exact(long time_in_usec);
+// main.c
+int			main(int argc, char **argv);
+// philo.c
+void		print_status(long time, int who, int something);
+void		*philosopher(void *arg);
+// philo_behavior.c
+int			change_status(t_status *s, int i);
 
 #endif
