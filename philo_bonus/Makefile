@@ -7,6 +7,7 @@ SRCS		= \
 				$(SRC_DIR)/lib_util.c \
 				$(SRC_DIR)/main.c \
 				$(SRC_DIR)/philo.c \
+				$(SRC_DIR)/philo_chgstatus.c \
 				$(SRC_DIR)/philo_wait.c
 OBJS		= $(SRCS:.c=.o)
 CC			= gcc

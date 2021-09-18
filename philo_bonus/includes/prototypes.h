@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 19:42:38 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/18 21:10:36 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/19 01:50:49 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ void		usleep_exact(long time_in_usec);
 // main.c
 int			main(int argc, char **argv);
 // philo.c
+void		print_status(long time, int who, int something);
 void		philosopher(t_param *p, int i);
+// philo_chgstatus.c
+int			change_status(t_param *p, t_phi *me);
 // philo_wait.c
 void		wait_all_philosophers(t_param *p);
 
