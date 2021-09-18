@@ -1,6 +1,6 @@
 #include "main.h"
 
-static int	init_param(t_params *p, int argc, char **argv)
+static int	init_param(t_param *p, int argc, char **argv)
 {
 	if (ft_atoi(argv[1], &p->num_of_philo) == -1)
 		return (-1);
@@ -10,11 +10,10 @@ static int	init_param(t_params *p, int argc, char **argv)
 		return (-1);
 	if (ft_atoi(argv[4], &p->ttsleep) == -1)
 		return (-1);
-	p->num_of_times_each_philo_must_eat = -1;
+	p->times_must_eat = -1;
 	if (argc == 6
-		&& ft_atoi(argv[5], &p->num_of_times_each_philo_must_eat) == -1)
+		&& ft_atoi(argv[5], &p->times_must_eat) == -1)
 		return (-1);
-	p->remain_eat_time = p->num_of_times_each_philo_must_eat;
 	return (0);
 }
 
@@ -36,14 +35,13 @@ static void	open_semaphore(char *sem_name, int sem_cnt, sem_t **sem)
 	sem_unlink(sem_name);
 }
 
-static void	create_philosophers(t_params *p, int *pid)
+static void	create_philosophers(t_param *p, int *pid)
 {
 	int			i;
 
 	i = 0;
 	while (i < p->num_of_philo)
 	{
-		p->i = i;
 		pid[i] = fork();
 		if (pid[i] == -1)
 			error_exit(ERR_FAILED_TO_FORK);
@@ -53,37 +51,23 @@ static void	create_philosophers(t_params *p, int *pid)
 	}
 }
 
-static void	wait_all_philosophers(t_params *p, int *pid)
+static void	wait_all_philosophers(t_param *p, int *pid)
 {
 	int		i;
 	int		status;
 
-	// int ret = wait(&status);
-	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
-	// ret = wait(&status);
-	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
-	// ret = wait(&status);
-	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
-	// ret = wait(&status);
-	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
-	// ret = wait(&status);
-	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
-	// ret = wait(&status);
-	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
-	// ret = wait(&status);
-	// printf("ret:%d, status:%d,exitstatus:%d,termsig:%d\n", ret, status,WEXITSTATUS(status),WTERMSIG(status));
 	if (sem_wait(g_sem_dead) == 0)
 	{
 		i = 0;
 		while (i < p->num_of_philo)
 			kill(pid[i++], SIGKILL);
-		i = 0;
-		while (i < p->num_of_philo)
-		{
-			if (wait(&status) < 0)
-				error_exit(ERR_FAILED_TO_WAIT);
-			i++;
-		}
+	}
+	i = 0;
+	while (i < p->num_of_philo)
+	{
+		if (wait(&status) == -1)
+			error_exit(ERR_FAILED_TO_WAIT);
+		i++;
 	}
 	if (sem_close(g_sem_philo) == -1)
 		error_exit(ERR_SEM_CLOSE);
@@ -95,19 +79,20 @@ int	main(int argc, char **argv)
 {
 	char		sem_philo[8];
 	char		sem_dead[8];
-	pid_t		pid[MAX_PHILOSPHERS];
-	t_params	p;
+	pid_t		pid[MAX_PHILOSOPHERS];
+	t_param		p;
 
 	if (argc < 5 || 6 < argc)
 		print_usage_exit();
 	if (init_param(&p, argc, argv) == -1)
 		return (-1);
-	if (p.num_of_philo > MAX_PHILOSPHERS)
-		error_exit(ERR_MAX_PHILOSPHERS);
+	if (p.num_of_philo > MAX_PHILOSOPHERS)
+		error_exit(ERR_MAX_PHILOSOPHERS);
 	ft_strlcpy(sem_philo, "/philo0", 8);
 	open_semaphore(sem_philo, p.num_of_philo / 2, &g_sem_philo);
 	ft_strlcpy(sem_dead, "/deadd0", 8);
 	open_semaphore(sem_dead, 0, &g_sem_dead);
 	create_philosophers(&p, pid);
 	wait_all_philosophers(&p, pid);
+	return (0);
 }

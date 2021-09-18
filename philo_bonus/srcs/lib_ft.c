@@ -34,6 +34,8 @@ int	ft_atoi(char *s, int *retnum)
 	int	ret;
 	int	i;
 
+	if (!s)
+		return (-1);
 	i = 0;
 	while (s[i] == ' ' || s[i] == '\t' || s[i] == '\n'
 		|| s[i] == '\f' || s[i] == '\r' || s[i] == '\v')

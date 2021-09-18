@@ -31,7 +31,7 @@ static void	change_status(t_param *p, t_phi *me)
 		print_status(me->now_time, me->i, P_TAKEN_FORK);
 		print_status(me->now_time, me->i, P_TAKEN_FORK);
 		me->status = P_EATING;
-		p->remain_eat_time--;
+		me->eat_cnt++;
 		me->lasteat_time = me->now_time;
 	}
 	else if (me->status == P_EATING
@@ -48,20 +48,13 @@ static void	change_status(t_param *p, t_phi *me)
 	print_status(me->now_time, me->i, me->status);
 }
 
-static int	is_finished(t_param *p)
+static int	is_in_finished_condition(t_param *p, t_phi *me)
 {
-	int			i;
-
-	if (p->num_of_times_each_philo_must_eat == -1)
-		return (0);
-	i = 0;
-	while (i < p->num_of_philo)
-	{
-		if (p->remain_eat_time >= 0)
-			return (0);
-		i++;
-	}
-	return (1);
+	if (p->times_must_eat != -1
+		&& (me->status == P_SLEEPING || me->status == P_THINKING)
+		&& me->eat_cnt >= p->times_must_eat)
+		return (1);
+	return (0);
 }
 
 void	philosopher(t_param *p, int i)
@@ -69,11 +62,13 @@ void	philosopher(t_param *p, int i)
 	t_phi		me;
 
 	me.i = i;
-	me.lasteat_time = get_time();
+	me.now_time = get_time();
+	me.lasteat_time = me.now_time;
 	me.status = P_THINKING;
+	me.eat_cnt = 0;
 	while (1)
 	{
-		if (is_finished(p) == 1)
+		if (is_in_finished_condition(p, &me) == 1)
 		{
 			sem_post(g_sem_dead);
 			exit (0);
@@ -82,7 +77,7 @@ void	philosopher(t_param *p, int i)
 		if (me.now_time - me.lasteat_time > p->ttdie)
 			break ;
 		change_status(p, &me);
-		usleep(5);
+		usleep(500);
 	}
 	print_status(me.now_time, me.i, P_DIED);
 	sem_post(g_sem_dead);
