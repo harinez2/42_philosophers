@@ -1,19 +1,27 @@
 #include "main.h"
 
+static int	change_status_to_eating(t_param *p, t_phi *me)
+{
+	me->now_time = get_time();
+	if (me->now_time - me->lasteat_time > p->ttdie)
+		return (-1);
+	print_status(me->now_time, me->i, P_TAKEN_FORK);
+	print_status(me->now_time, me->i, P_TAKEN_FORK);
+	me->status = P_EATING;
+	me->eat_cnt++;
+	me->lasteat_time = me->now_time;
+	return (0);
+}
+
 int	change_status(t_param *p, t_phi *me)
 {
 	if (p->num_of_philo <= 1)
 		return (-1);
-	if (me->status == P_THINKING && sem_wait(g_sem_philo) == 0)
+	if (me->status == P_THINKING
+		&& sem_wait(g_sem_philo) == 0)
 	{
-		me->now_time = get_time();
-		if (me->now_time - me->lasteat_time > p->ttdie)
+		if (change_status_to_eating(p, me) == -1)
 			return (-1);
-		print_status(me->now_time, me->i, P_TAKEN_FORK);
-		print_status(me->now_time, me->i, P_TAKEN_FORK);
-		me->status = P_EATING;
-		me->eat_cnt++;
-		me->lasteat_time = me->now_time;
 	}
 	else if (me->status == P_EATING
 		&& me->now_time - me->lasteat_time > p->tteat)
