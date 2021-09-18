@@ -34,6 +34,16 @@ static void	open_semaphore(char *sem_name, int sem_cnt, sem_t **sem)
 	sem_unlink(sem_name);
 }
 
+static void	close_all_semaphore(void)
+{
+	if (sem_close(g_sem_philo) == -1)
+		error_exit(ERR_SEM_CLOSE);
+	if (sem_close(g_sem_dead) == -1)
+		error_exit(ERR_SEM_CLOSE);
+	if (sem_close(g_sem_ate) == -1)
+		error_exit(ERR_SEM_CLOSE);
+}
+
 static void	create_philosophers(t_param *p)
 {
 	int			i;
@@ -71,5 +81,6 @@ int	main(int argc, char **argv)
 	open_semaphore(sem_ate, 0, &g_sem_ate);
 	create_philosophers(&p);
 	wait_all_philosophers(&p);
+	close_all_semaphore();
 	return (0);
 }

@@ -82,10 +82,4 @@ void	wait_all_philosophers(t_param *p)
 	i = 0;
 	while (i < 2)
 		pthread_detach(t[i++]);
-	if (sem_close(g_sem_philo) == -1)
-		error_exit(ERR_SEM_CLOSE);
-	if (sem_close(g_sem_dead) == -1)
-		error_exit(ERR_SEM_CLOSE);
-	if (sem_close(g_sem_ate) == -1)
-		error_exit(ERR_SEM_CLOSE);
 }
