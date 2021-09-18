@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 19:42:38 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/18 02:35:12 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/19 01:46:30 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int			main(int argc, char **argv);
 // philo.c
 void		print_status(long time, int who, int something);
 void		*philosopher(void *arg);
-// philo_behavior.c
+// philo_chgstatus.c
 int			change_status(t_status *s, int i);
 
 #endif
