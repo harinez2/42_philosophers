@@ -16,6 +16,8 @@ static void	print_status(long time, int who, int something)
 
 static void	change_status(t_param *p, t_phi *me)
 {
+	if (p->num_of_philo <= 1)
+		return ;
 	if (me->status == P_THINKING
 		&& sem_wait(g_sem_philo) == 0)
 	{
