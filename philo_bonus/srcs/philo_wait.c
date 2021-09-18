@@ -73,13 +73,13 @@ void	wait_all_philosophers(t_param *p)
 			printf("  pthread_join joined.\n");
 	}
 	i = 0;
+	while (i < 2)
+		pthread_detach(t[i++]);
+	i = 0;
 	while (i < p->num_of_philo)
 	{
-		if (wait(&status) == -1)
+		if (waitpid(p->pid[i], &status, WNOHANG | WUNTRACED) == -1)
 			error_exit(ERR_FAILED_TO_WAIT);
 		i++;
 	}
-	i = 0;
-	while (i < 2)
-		pthread_detach(t[i++]);
 }
