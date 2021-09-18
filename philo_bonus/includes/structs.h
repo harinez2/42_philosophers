@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 19:42:41 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/18 15:21:39 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/18 21:10:46 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ typedef struct s_param
 	int		tteat;
 	int		ttsleep;
 	int		times_must_eat;
+	pid_t	pid[MAX_PHILOSOPHERS];
 }	t_param;
 
 typedef struct s_phi

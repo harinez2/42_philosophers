@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/18 01:52:42 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/18 02:36:06 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/18 21:17:13 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <sys/wait.h>
+# include <pthread.h>
 
 # include "constants.h"
 # include "structs.h"
@@ -29,5 +30,6 @@
 
 sem_t	*g_sem_philo;
 sem_t	*g_sem_dead;
+sem_t	*g_sem_ate;
 
 #endif

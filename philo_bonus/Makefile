@@ -4,8 +4,10 @@ SRC_DIR		= srcs
 SRCS		= \
 				$(SRC_DIR)/error.c \
 				$(SRC_DIR)/lib_ft.c \
-				$(SRC_DIR)/philosopher.c \
-				$(SRC_DIR)/main.c
+				$(SRC_DIR)/lib_util.c \
+				$(SRC_DIR)/main.c \
+				$(SRC_DIR)/philo.c \
+				$(SRC_DIR)/philo_wait.c
 OBJS		= $(SRCS:.c=.o)
 CC			= gcc
 CFLAGS		= -Wall -Wextra -Werror -pthread

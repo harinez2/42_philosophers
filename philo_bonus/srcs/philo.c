@@ -1,13 +1,5 @@
 #include "main.h"
 
-static long	get_time(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return ((long)tv.tv_sec * 1000 + (int)(tv.tv_usec / 1000));
-}
-
 static void	print_status(long time, int who, int something)
 {
 	if (something == P_TAKEN_FORK)
@@ -53,8 +45,23 @@ static int	is_in_finished_condition(t_param *p, t_phi *me)
 	if (p->times_must_eat != -1
 		&& (me->status == P_SLEEPING || me->status == P_THINKING)
 		&& me->eat_cnt >= p->times_must_eat)
+	{
 		return (1);
+	}
 	return (0);
+}
+
+static void	sleep_some(t_param *p, t_phi *me)
+{
+	int		haif_time_to_die;
+
+	haif_time_to_die = (p->ttdie - p->tteat - p->ttsleep) / 2;
+	if (p->num_of_philo % 2 == 0)
+		usleep_exact(1000);
+	else if (me->lasteat_time + haif_time_to_die < me->now_time)
+		usleep_exact(1000);
+	else
+		usleep_exact(3000);
 }
 
 void	philosopher(t_param *p, int i)
@@ -70,14 +77,14 @@ void	philosopher(t_param *p, int i)
 	{
 		if (is_in_finished_condition(p, &me) == 1)
 		{
-			sem_post(g_sem_dead);
+			sem_post(g_sem_ate);
 			exit (0);
 		}
 		me.now_time = get_time();
 		if (me.now_time - me.lasteat_time > p->ttdie)
 			break ;
 		change_status(p, &me);
-		usleep(500);
+		sleep_some(p, &me);
 	}
 	print_status(me.now_time, me.i, P_DIED);
 	sem_post(g_sem_dead);
