@@ -38,10 +38,28 @@ static void	sleep_some(t_param *p, t_phi *me)
 		usleep_exact(3000);
 }
 
+static void	*check_death(void *arg)
+{
+	t_phi	*me;
+
+	me = (t_phi *)arg;
+	while (1)
+	{
+		if (me->now_time - me->lasteat_time > g_p.ttdie)
+			break ;
+		usleep(200);
+	}
+	kill(g_p.pid[me->i], SIGINT);
+	sem_post(g_sem_dead);
+	print_status(me->now_time, me->i, me->status);
+	return (NULL);
+}
+
 void	philosopher(t_param *p, int i)
 {
 	t_phi		me;
 
+	pthread_create(&me.t, NULL, check_death, &me);
 	me.i = i;
 	me.now_time = get_time();
 	me.lasteat_time = me.now_time;

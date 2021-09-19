@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/18 01:52:42 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/18 21:17:13 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/19 20:31:23 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@
 # include "structs.h"
 # include "prototypes.h"
 
-sem_t	*g_sem_philo;
-sem_t	*g_sem_dead;
-sem_t	*g_sem_ate;
+t_param		g_p;
+sem_t		*g_sem_philo;
+sem_t		*g_sem_dead;
+sem_t		*g_sem_ate;
 
 #endif

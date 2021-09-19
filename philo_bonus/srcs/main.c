@@ -65,22 +65,21 @@ int	main(int argc, char **argv)
 	char		sem_philo[8];
 	char		sem_dead[8];
 	char		sem_ate[8];
-	t_param		p;
 
 	if (argc < 5 || 6 < argc)
 		print_usage_exit();
-	if (init_param(&p, argc, argv) == -1)
+	if (init_param(&g_p, argc, argv) == -1)
 		return (-1);
-	if (p.num_of_philo > MAX_PHILOSOPHERS)
+	if (g_p.num_of_philo > MAX_PHILOSOPHERS)
 		error_exit(ERR_MAX_PHILOSOPHERS);
 	ft_strlcpy(sem_philo, "/philo0", 8);
-	open_semaphore(sem_philo, p.num_of_philo / 2, &g_sem_philo);
+	open_semaphore(sem_philo, g_p.num_of_philo / 2, &g_sem_philo);
 	ft_strlcpy(sem_dead, "/deadd0", 8);
 	open_semaphore(sem_dead, 0, &g_sem_dead);
 	ft_strlcpy(sem_dead, "/ateee0", 8);
 	open_semaphore(sem_ate, 0, &g_sem_ate);
-	create_philosophers(&p);
-	wait_all_philosophers(&p);
+	create_philosophers(&g_p);
+	wait_all_philosophers(&g_p);
 	close_all_semaphore();
 	return (0);
 }
