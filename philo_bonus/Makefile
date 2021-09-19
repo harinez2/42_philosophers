@@ -12,6 +12,7 @@ SRCS		= \
 OBJS		= $(SRCS:.c=.o)
 CC			= gcc
 CFLAGS		= -Wall -Wextra -Werror -pthread
+DBGFLG		= -g3 -fsanitize=address
 
 all: $(NAME)
 
