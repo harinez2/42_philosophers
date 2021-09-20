@@ -1,30 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_behavior.c                                   :+:      :+:    :+:   */
+/*   philo_chgstatus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/18 01:52:56 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/18 02:11:59 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/21 00:48:32 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+
+static int	change_status_take_left_fork(t_status *s, int i)
+{
+	pthread_mutex_lock(&s->fork[i].mtx);
+	if (s->fork[i].i == 1)
+	{
+		s->fork[i].i = 0;
+		print_status(s->ph[i].now_time, i, P_TAKEN_FORK);
+		s->ph[i].status = P_TAKEN_FORK;
+		s->ph[i].lasteat_time = s->ph[i].now_time;
+	}
+	pthread_mutex_unlock(&s->fork[i].mtx);
+	return (P_TAKEN_FORK);
+}
 
 static int	change_status_to_eating(t_status *s, int i)
 {
 	int		ret;
 
 	ret = 0;
-	pthread_mutex_lock(&s->fork[i].mtx);
 	pthread_mutex_lock(&s->fork[(i + 1) % s->param.num_of_philo].mtx);
-	if (s->fork[i].i == 1
-		&& s->fork[(i + 1) % s->param.num_of_philo].i == 1)
+	if (s->fork[(i + 1) % s->param.num_of_philo].i == 1)
 	{
-		s->fork[i].i = 0;
 		s->fork[(i + 1) % s->param.num_of_philo].i = 0;
-		print_status(s->ph[i].now_time, i, P_TAKEN_FORK);
 		print_status(s->ph[i].now_time, i, P_TAKEN_FORK);
 		s->ph[i].status = P_EATING;
 		s->ph[i].lasteat_time = s->ph[i].now_time;
@@ -36,7 +46,6 @@ static int	change_status_to_eating(t_status *s, int i)
 			s->num_of_philo_ate++;
 	}
 	pthread_mutex_unlock(&s->fork[(i + 1) % s->param.num_of_philo].mtx);
-	pthread_mutex_unlock(&s->fork[i].mtx);
 	return (ret);
 }
 
@@ -74,6 +83,8 @@ int	change_status(t_status *s, int i)
 	if (s->param.num_of_philo <= 1)
 		return (-1);
 	if (s->ph[i].status == P_THINKING)
+		return (change_status_take_left_fork(s, i));
+	if (s->ph[i].status == P_TAKEN_FORK)
 		return (change_status_to_eating(s, i));
 	else if (s->ph[i].status == P_EATING)
 		return (change_status_to_sleeping(s, i));

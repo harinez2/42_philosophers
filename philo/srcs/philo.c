@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/18 01:52:59 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/18 02:12:04 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/21 00:54:05 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,6 @@ static int	is_in_finished_condition(t_status *s)
 	return (finish_flg);
 }
 
-static void	sleep_some(t_status *s, int i)
-{
-	int		haif_time_to_die;
-
-	haif_time_to_die = (s->param.ttdie - s->param.tteat - s->param.ttsleep) / 2;
-	if (s->param.num_of_philo % 2 == 0)
-		usleep_exact(1000);
-	else if (s->ph[i].lasteat_time + haif_time_to_die < s->ph[i].now_time)
-		usleep_exact(1000);
-	else
-		usleep_exact(3000);
-}
-
 static int	philosopher_doing(t_status *s, int i)
 {
 	if (is_in_finished_condition(s) == 1)
@@ -63,7 +50,7 @@ static int	philosopher_doing(t_status *s, int i)
 	if (s->ph[i].now_time - s->ph[i].lasteat_time > s->param.ttdie)
 		return (ST_PHILO_DEAD);
 	change_status(s, i);
-	sleep_some(s, i);
+	usleep_exact(500);
 	return (0);
 }
 
