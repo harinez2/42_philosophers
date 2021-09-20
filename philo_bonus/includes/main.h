@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/18 01:52:42 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/19 20:31:23 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/20 11:32:25 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/time.h>
 # include <sys/wait.h>
 # include <pthread.h>
+# include <signal.h>
 
 # include "constants.h"
 # include "structs.h"
