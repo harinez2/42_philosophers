@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/19 20:43:56 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/19 20:43:57 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/20 11:36:51 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void	error_exit(int errcode)
 void	print_usage_exit(void)
 {
 	printf("Usage:\n");
-	printf("    ./philo NUM_OF_PHILO TT_DIE TT_EAT TT_SLEEP [TIMES_MUST_EAT]\n");
+	printf("    ./philo_bonus");
+	printf(" NUM_OF_PHILO TT_DIE TT_EAT TT_SLEEP [TIMES_MUST_EAT]\n");
 	printf("\n");
 	printf("Parameters:\n");
 	printf("    NUM_OF_PHILO\n");
