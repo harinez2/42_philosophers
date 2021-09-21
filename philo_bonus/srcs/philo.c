@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/19 20:44:21 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/21 17:58:39 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/21 18:04:23 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ static void	*check_death(void *arg)
 			break ;
 		usleep(200);
 	}
+	print_status(me->now_time, me->i, P_DIED);
 	kill(g_p.pid[me->i], SIGINT);
 	sem_post(g_sem_dead);
-	print_status(me->now_time, me->i, me->status);
 	return (NULL);
 }
 
