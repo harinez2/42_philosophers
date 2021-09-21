@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/19 20:44:21 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/21 18:04:23 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/21 20:04:37 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,12 @@ void	philosopher(t_param *p, int i)
 {
 	t_phi		me;
 
-	pthread_create(&me.t, NULL, check_death, &me);
 	me.i = i;
 	me.now_time = get_time();
 	me.lasteat_time = me.now_time;
 	me.status = P_THINKING;
 	me.eat_cnt = 0;
+	pthread_create(&me.t, NULL, check_death, &me);
 	while (1)
 	{
 		if (is_in_finished_condition(p, &me) == 1)
