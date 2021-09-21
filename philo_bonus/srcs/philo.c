@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/19 20:44:21 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/19 20:44:21 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/21 17:58:39 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static void	*check_death(void *arg)
 	me = (t_phi *)arg;
 	while (1)
 	{
+		me->now_time = get_time();
 		if (me->now_time - me->lasteat_time > g_p.ttdie)
 			break ;
 		usleep(200);
