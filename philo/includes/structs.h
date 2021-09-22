@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 19:42:41 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/18 02:30:42 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/23 01:00:45 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 typedef struct s_param
 {
-	int		num_of_philo;
-	int		ttdie;
-	int		tteat;
-	int		ttsleep;
-	int		times_must_eat;
+	long		num_of_philo;
+	long		ttdie;
+	long		tteat;
+	long		ttsleep;
+	long		times_must_eat;
 }	t_param;
 
 typedef struct s_fork
