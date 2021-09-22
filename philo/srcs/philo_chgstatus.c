@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/18 01:52:56 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/21 00:48:32 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/23 00:58:23 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static int	change_status_take_left_fork(t_status *s, int i)
 		s->fork[i].i = 0;
 		print_status(s->ph[i].now_time, i, P_TAKEN_FORK);
 		s->ph[i].status = P_TAKEN_FORK;
-		s->ph[i].lasteat_time = s->ph[i].now_time;
 	}
 	pthread_mutex_unlock(&s->fork[i].mtx);
 	return (P_TAKEN_FORK);
