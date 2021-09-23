@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/18 01:52:59 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/23 15:27:06 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/23 17:45:36 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static int	is_in_finished_condition(t_status *s)
 	finish_flg = 0;
 	pthread_mutex_lock(&s->mtx);
 	if (s->someone_dead > 0)
+		finish_flg = 1;
+	else if (s->param.times_must_eat == 0)
 		finish_flg = 1;
 	else if (s->param.times_must_eat > 0
 		&& s->num_of_philo_ate == s->param.num_of_philo)
