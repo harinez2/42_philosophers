@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/18 01:52:56 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/23 00:58:23 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/23 15:26:34 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ static int	change_status_take_left_fork(t_status *s, int i)
 	pthread_mutex_lock(&s->fork[i].mtx);
 	if (s->fork[i].i == 1)
 	{
+		s->ph[i].now_time = get_time();
+		if (s->ph[i].now_time - s->ph[i].lasteat_time > s->param.ttdie)
+			return (ST_PHILO_DEAD);
 		s->fork[i].i = 0;
 		print_status(s->ph[i].now_time, i, P_TAKEN_FORK);
 		s->ph[i].status = P_TAKEN_FORK;
@@ -33,6 +36,9 @@ static int	change_status_to_eating(t_status *s, int i)
 	pthread_mutex_lock(&s->fork[(i + 1) % s->param.num_of_philo].mtx);
 	if (s->fork[(i + 1) % s->param.num_of_philo].i == 1)
 	{
+		s->ph[i].now_time = get_time();
+		if (s->ph[i].now_time - s->ph[i].lasteat_time > s->param.ttdie)
+			return (ST_PHILO_DEAD);
 		s->fork[(i + 1) % s->param.num_of_philo].i = 0;
 		print_status(s->ph[i].now_time, i, P_TAKEN_FORK);
 		s->ph[i].status = P_EATING;
@@ -59,6 +65,7 @@ static int	change_status_to_sleeping(t_status *s, int i)
 		pthread_mutex_unlock(&s->fork[(i + 1) % s->param.num_of_philo].mtx);
 		pthread_mutex_unlock(&s->fork[i].mtx);
 		s->ph[i].status = P_SLEEPING;
+		s->ph[i].now_time = get_time();
 		print_status(s->ph[i].now_time, i, s->ph[i].status);
 		return (P_SLEEPING);
 	}
