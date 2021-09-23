@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/18 01:52:59 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/23 15:23:41 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/23 15:27:06 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,10 @@ void	*philosopher(void *arg)
 	}
 	if (ret == ST_PHILO_DEAD)
 	{
-		pthread_mutex_lock(&s.mtx);
+		pthread_mutex_lock(&s->mtx);
 		s->someone_dead++;
 		s->dead_time = s->ph[i].now_time;
-		pthread_mutex_unlock(&s.mtx);
+		pthread_mutex_unlock(&s->mtx);
 		print_status(s->ph[i].now_time, i, P_DIED);
 	}
 	return (NULL);
