@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/18 01:52:56 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/23 15:26:34 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/23 18:01:26 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static int	change_status_to_sleeping(t_status *s, int i)
 static int	change_status_to_thinking(t_status *s, int i)
 {
 	if (s->ph[i].now_time - s->ph[i].lasteat_time
-		> s->param.tteat + s->param.ttsleep)
+		> (long)s->param.tteat + (long)s->param.ttsleep)
 	{
 		s->ph[i].status = P_THINKING;
 		print_status(s->ph[i].now_time, i, s->ph[i].status);
