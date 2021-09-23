@@ -6,7 +6,7 @@
 /*   By: yonishi <yonishi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/18 01:52:37 by yonishi           #+#    #+#             */
-/*   Updated: 2021/09/18 01:52:37 by yonishi          ###   ########.fr       */
+/*   Updated: 2021/09/23 17:39:28 by yonishi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ static int	read_param(t_param *p, int argc, char **argv)
 		return (print_error(ERR_MAX_PHILOSOPHERS));
 	else if (p->num_of_philo < 1 || p->ttdie < 0 || INT_MAX < p->ttdie
 		|| p->tteat < 0 || INT_MAX < p->tteat
-		|| p->ttsleep < 0 || INT_MAX < p->ttsleep)
+		|| p->ttsleep < 0 || INT_MAX < p->ttsleep
+		|| p->times_must_eat < -1 || INT_MAX < p->times_must_eat)
 		return (print_error(ERR_PARAM));
 	return (0);
 }
